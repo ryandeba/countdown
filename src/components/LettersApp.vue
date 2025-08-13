@@ -1,6 +1,9 @@
 <script setup lang="ts">
   // TODO: http://www.thecountdownpage.com/letters.htm
   import { ref, computed, watch, onMounted } from 'vue'
+  import KeyboardInput from './LettersKeyboardInput.vue'
+  import LettersSubmissions from './LettersSubmissions.vue'
+  import LettersScore from './LettersScore.vue'
 
   const vowels = `
     ${'A'.repeat(15)} ${'E'.repeat(21)} ${'I'.repeat(13)} ${'O'.repeat(13)} ${'U'.repeat(5)}
@@ -19,34 +22,42 @@
     .split("")
 
   const letters = ref([])
-  const candidateWords = ref([])
+  const submissions = ref([])
+  const input = ref("")
+  const submittedWord = ref("")
 
   const selectedLetters = computed(() => {
     return letters.value
       .filter(l => l.selected)
       .sort((a, b) => a.index - b.index)
       .map(l => l.char)
+      .join("")
   })
 
-  const nextIndex = computed(() => {
+  const maxIndex = computed(() => {
     let result = letters.value
       .filter(l => l.selected)
       .sort((a, b) => a.index - b.index)
       .pop()
-      .index + 1
+      ?.index
 
-    result = Number.isInteger(result) ? result : 0
+    result = Number.isInteger(result) ? result : -1
 
     return result
   })
 
+  watch(selectedLetters, () => {
+    input.value = selectedLetters.value
+  })
+
   const reset = () => {
     randomizeLetters()
-    candidateWords.value = []
+    submissions.value = []
+    submittedWord.value = ""
   }
 
   const randomizeLetters = () => {
-    let numberOfVowels = Math.floor(Math.random() * 3) + 3
+    let numberOfVowels = Math.floor(Math.random() * 2.7) + 3 // between 3-5, with a lower probability for 5
     let numberOfConsonants = 9 - numberOfVowels
 
     let result = shuffle(vowels).slice(0, numberOfVowels)
@@ -66,11 +77,11 @@
     }
   }
 
-  const onClickLetter = index => {
+  const selectLetterAtIndex = index => {
     letters.value[index].selected = !letters.value[index].selected
 
     if (letters.value[index].selected) {
-      letters.value[index].index = nextIndex.value
+      letters.value[index].index = maxIndex.value + 1
     } else {
       let letterIndex = letters.value[index].index
 
@@ -84,16 +95,53 @@
     }
   }
 
+  const onKeyPressed = key => {
+    // TODO: only in 1 game state (TODO: implement game state)
+    key = key.toUpperCase()
+
+    if (key == "BACKSPACE") {
+      let letter = letters.value
+        .find(l => l.index == maxIndex.value)
+
+      if (letter) {
+        letter.selected = false
+        letter.index = -1
+      }
+
+      return
+    }
+
+    if (key == "ENTER") {
+      addSubmission()
+      return
+    }
+
+    let indexOfUnselectedLetter = letters.value.findIndex(l => !l.selected && l.char == key)
+
+    if (indexOfUnselectedLetter > -1) {
+      selectLetterAtIndex(indexOfUnselectedLetter)
+    }
+  }
+
   const unselectAllLetters = () => {
     letters.value
       .forEach(l => {
-        l.selected = false;
+        l.selected = false
         l.index = -1
       })
   }
 
   const addSubmission = () => {
-    candidateWords.value.push(selectedLetters.value.join(""))
+    let word = selectedLetters.value
+
+    if (word.length == 0) {
+      return
+    }
+
+    if (submissions.value.indexOf(word) == -1) {
+      submissions.value.push(word)
+    }
+
     unselectAllLetters()
   }
 
@@ -103,69 +151,74 @@
 </script>
 
 <template>
-  <div class="flex justify-center mt-5">
-    <button
-      type="button"
-      class="btn btn-error btn-sm ml-5"
-      @click="randomizeLetters"
-    >
-      New Game
-    </button>
+  <div class="flex justify-center my-5">
+    
   </div>
 
-  <div class="flex justify-center">
+  <div class="flex justify-center my-8">
     <button
       v-for="(l, i) in letters"
       :key="i"
       type="button"
-      class="btn btn-square btn-xl m-2"
+      class="btn btn-square btn-xl m-1"
       :class="l.selected ? 'scale-75 btn-default' : 'btn-primary'"
-      @click="onClickLetter(i)"
+      @click="selectLetterAtIndex(i)"
     >
       {{ l.char }}
     </button>
   </div>
 
-  <div class="flex justify-center mt-6 text-4xl">
-    <template v-if="selectedLetters.length == 0">
-      &nbsp;
-    </template>
+  <template v-if="submittedWord.length == 0">
+    <div class="flex justify-center">
+      <div class="card card-border bg-base-100 w-96 bg-neutral m-2">
+        <div class="card-body">
+          <p>
+            <input
+              v-model="input"
+              class="input input-lg w-full tracking-[.4rem]"
+              readonly
+            >
+          </p>
 
-    <template v-else>
-      {{ selectedLetters.join(" ") }}
-    </template>
-  </div>
+          <div class="card-actions justify-between">
+            <button
+              type="button"
+              class="btn btn-danger mr-5"
+              @click="unselectAllLetters"
+            >
+              Clear
+            </button>
 
-  <div class="flex justify-center my-6">
-    <template v-if="selectedLetters.length == 0">
-      TODO: instructions
-    </template>
-
-    <template v-else>
-      <button
-        type="button"
-        class="btn btn-danger mr-5"
-        @click="unselectAllLetters"
-      >
-        Unselect all
-      </button>
-
-      <button
-        type="button"
-        class="btn btn-primary"
-        @click="addSubmission"
-      >
-        Submit
-      </button>
-    </template>
-  </div>
-
-  <div class="my-6">
-    <div
-      v-for="w in candidateWords"
-      class="flex justify-center"
-    >
-      {{ w }}
+            <button
+              type="button"
+              class="btn btn-primary"
+              @click="addSubmission"
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
+  </template>
+
+  <template v-if="submittedWord.length > 0">
+    <LettersScore
+      :word="submittedWord"
+      :letters="letters.map(l => l.char).join('')"
+      @reset="reset"
+    ></LettersScore>
+  </template>
+
+  <template v-else-if="submissions.length > 0">
+    <LettersSubmissions
+      class="m-2"
+      :words="submissions"
+      @submit="(word) => { submittedWord = word }"
+    ></LettersSubmissions>
+  </template>
+
+  <KeyboardInput
+    @keyPressed="onKeyPressed"
+  ></KeyboardInput>
 </template>
