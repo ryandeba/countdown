@@ -2,29 +2,34 @@
   // TODO: http://www.thecountdownpage.com/letters.htm
   import { ref, computed, watch, onMounted } from 'vue'
   import KeyboardInput from './LettersKeyboardInput.vue'
+  import LettersLetters from './LettersLetters.vue'
+  import LettersVowelsAndConsonants from './LettersVowelsAndConsonants.vue'
   import LettersSubmissions from './LettersSubmissions.vue'
   import LettersScore from './LettersScore.vue'
-
-  const vowels = `
-    ${'A'.repeat(15)} ${'E'.repeat(21)} ${'I'.repeat(13)} ${'O'.repeat(13)} ${'U'.repeat(5)}
-  `
-    .replace(/\W/g, "")
-    .split("")
-
-  const consonants = `
-    ${'B'.repeat(2)} ${'C'.repeat(3)} ${'D'.repeat(6)} ${'F'.repeat(2)} ${'G'.repeat(3)}
-    ${'H'.repeat(2)} ${'J'.repeat(1)} ${'K'.repeat(1)} ${'L'.repeat(5)} ${'M'.repeat(4)}
-    ${'N'.repeat(8)} ${'P'.repeat(4)} ${'Q'.repeat(1)} ${'R'.repeat(9)} ${'S'.repeat(9)}
-    ${'T'.repeat(9)} ${'V'.repeat(1)} ${'W'.repeat(1)} ${'X'.repeat(1)} ${'Y'.repeat(1)}
-    ${'Z'.repeat(1)}
-  `
-    .replace(/\W/g, "")
-    .split("")
+  import LettersTimer from './LettersTimer.vue'
 
   const letters = ref([])
   const submissions = ref([])
   const input = ref("")
   const submittedWord = ref("")
+  const previewWord = ref("")
+  const timer = ref(30)
+
+  const gameStatus = computed(() => {
+    if (letters.value.filter(l => Boolean(l.char)).length < 9) {
+      return "LETTERS"
+    }
+
+    if (timer.value > 0) {
+      return "WORDS"
+    }
+
+    if (submittedWord.value == "") {
+      return "SUBMIT"
+    }
+
+    return "SCORE"
+  })
 
   const selectedLetters = computed(() => {
     return letters.value
@@ -50,34 +55,37 @@
     input.value = selectedLetters.value
   })
 
+  watch(gameStatus, () => {
+    unselectAllLetters()
+  })
+
   const reset = () => {
-    randomizeLetters()
+    letters.value = new Array(9).fill("").map((e, i) => {
+      return {
+        char: "", index: -1, selected: false, id: i
+      }
+    })
     submissions.value = []
     submittedWord.value = ""
+    previewWord.value = ""
+    timer.value = 30
   }
 
-  const randomizeLetters = () => {
-    let numberOfVowels = Math.floor(Math.random() * 2.7) + 3 // between 3-5, with a lower probability for 5
-    let numberOfConsonants = 9 - numberOfVowels
+  const addLetter = l => {
+    let index = letters.value.findIndex(l => l.char == "")
 
-    let result = shuffle(vowels).slice(0, numberOfVowels)
-
-    result = result.concat(
-      shuffle(consonants).slice(0, numberOfConsonants)
-    )
-
-    letters.value = shuffle(result)
-      .map(l => ({char: l, selected: false, index: -1}))
-
-    function shuffle(a) {
-      return a
-        .map(l => ({l, sort: Math.random()}))
-        .sort((a, b) => a.sort - b.sort)
-        .map(({l}) => l)
+    if (index == -1) {
+      return
     }
+
+    letters.value[index].char = l
   }
 
   const selectLetterAtIndex = index => {
+    if (gameStatus.value != 'WORDS') {
+      return
+    }
+
     letters.value[index].selected = !letters.value[index].selected
 
     if (letters.value[index].selected) {
@@ -96,7 +104,6 @@
   }
 
   const onKeyPressed = key => {
-    // TODO: only in 1 game state (TODO: implement game state)
     key = key.toUpperCase()
 
     if (key == "BACKSPACE") {
@@ -151,34 +158,34 @@
 </script>
 
 <template>
-  <div class="flex justify-center my-5">
-    
+  <div class="flex justify-center">
+    <LettersLetters
+      v-model="letters"
+      @select-letter-at-index="selectLetterAtIndex"
+      :preview="previewWord"
+    ></LettersLetters>
   </div>
 
-  <div class="flex justify-center my-8">
-    <button
-      v-for="(l, i) in letters"
-      :key="i"
-      type="button"
-      class="btn btn-square btn-xl m-1"
-      :class="l.selected ? 'scale-75 btn-default' : 'btn-primary'"
-      @click="selectLetterAtIndex(i)"
-    >
-      {{ l.char }}
-    </button>
-  </div>
+  <template v-if="gameStatus == 'LETTERS'">
+    <LettersVowelsAndConsonants
+      @add="addLetter"
+    ></LettersVowelsAndConsonants>
+  </template>
 
-  <template v-if="submittedWord.length == 0">
+  <template v-if="gameStatus == 'WORDS'">
+    <LettersTimer
+      v-model="timer"
+      class="mb-4"
+    ></LettersTimer>
+
     <div class="flex justify-center">
       <div class="card card-border bg-base-100 w-96 bg-neutral m-2">
         <div class="card-body">
-          <p>
-            <input
-              v-model="input"
-              class="input input-lg w-full tracking-[.4rem]"
-              readonly
-            >
-          </p>
+          <input
+            v-model="input"
+            class="input input-lg w-full tracking-[.4rem]"
+            readonly
+          >
 
           <div class="card-actions justify-between">
             <button
@@ -200,25 +207,28 @@
         </div>
       </div>
     </div>
+
+    <KeyboardInput
+      @keyPressed="onKeyPressed"
+    ></KeyboardInput>
   </template>
 
-  <template v-if="submittedWord.length > 0">
+  <template v-if="gameStatus == 'SUBMIT'">
+    <LettersSubmissions
+      class="m-2"
+      :words="submissions"
+      :game-status="gameStatus"
+      @submit="(word) => { submittedWord = word }"
+      @preview="w => previewWord = w"
+      @reset="reset"
+    ></LettersSubmissions>
+  </template>
+
+  <template v-if="gameStatus == 'SCORE'">
     <LettersScore
       :word="submittedWord"
       :letters="letters.map(l => l.char).join('')"
       @reset="reset"
     ></LettersScore>
   </template>
-
-  <template v-else-if="submissions.length > 0">
-    <LettersSubmissions
-      class="m-2"
-      :words="submissions"
-      @submit="(word) => { submittedWord = word }"
-    ></LettersSubmissions>
-  </template>
-
-  <KeyboardInput
-    @keyPressed="onKeyPressed"
-  ></KeyboardInput>
 </template>

@@ -3,30 +3,34 @@
 </script>
 
 <template>
-  <header>
-    <h1 class="text-4xl text-center mb-6">
-      Countdown
-    </h1>
+  <header class="mb-6">
+    <RouterLink
+      to="/numbers"
+      class="text-5xl font-black flex justify-center"
+    >
+      <div
+        v-for="c in 'COUNTDOWN'"
+        class="
+          rounded-box
 
-    <nav class="flex justify-center">
-      <div role="tablist" class="tabs tabs-box tabs-lg">
-        <RouterLink
-          to="/letters"
-          class="tab"
-          :class="$route.path == '/letters' ? 'tab-active' : ''"
-        >
-          Letters
-        </RouterLink>
+          bg-linear-to-t from-indigo-500 to-blue-900
 
-        <RouterLink
-          to="/numbers"
-          class="tab"
-          :class="$route.path == '/numbers' ? 'tab-active' : ''"
-        >
-          Numbers
-        </RouterLink>
+          border
+          border-gray-500
+
+          w-15
+          aspect-1/1
+
+          flex
+          items-center
+          justify-center
+
+          m-0.5
+        "
+      >
+        {{ c }}
       </div>
-    </nav>
+    </RouterLink>
   </header>
 
   <RouterView />
