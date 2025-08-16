@@ -60,13 +60,13 @@
 
         <template v-if="selectedIndex > -1">
           <div class="card-actions justify-center tracking-normal min-h-12">
-              <button
-                type="button"
-                class="btn btn-primary btn-wide mt-2"
-                @click="submit"
-              >
-                Submit '{{ words[selectedIndex] }}'
-              </button>
+            <button
+              type="button"
+              class="btn btn-primary btn-wide mt-2"
+              @click="submit"
+            >
+              Submit '{{ words[selectedIndex] }}'
+            </button>
           </div>
         </template>
       </div>

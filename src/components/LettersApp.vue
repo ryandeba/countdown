@@ -10,7 +10,6 @@
 
   const letters = ref([])
   const submissions = ref([])
-  const input = ref("")
   const submittedWord = ref("")
   const previewWord = ref("")
   const timer = ref(30)
@@ -49,10 +48,6 @@
     result = Number.isInteger(result) ? result : -1
 
     return result
-  })
-
-  watch(selectedLetters, () => {
-    input.value = selectedLetters.value
   })
 
   watch(gameStatus, () => {
@@ -182,7 +177,7 @@
       <div class="card card-border bg-base-100 w-96 bg-neutral m-2">
         <div class="card-body">
           <input
-            v-model="input"
+            :value="selectedLetters"
             class="input input-lg w-full tracking-[.4rem]"
             readonly
           >
@@ -228,6 +223,7 @@
     <LettersScore
       :word="submittedWord"
       :letters="letters.map(l => l.char).join('')"
+      @preview="w => previewWord = w"
       @reset="reset"
     ></LettersScore>
   </template>

@@ -5,7 +5,7 @@
 <template>
   <header class="mb-6">
     <RouterLink
-      to="/numbers"
+      to="/"
       class="text-5xl font-black flex justify-center"
     >
       <div
