@@ -1,31 +1,42 @@
 <script setup lang="ts">
   import { defineProps, defineEmits, ref, computed, watch, onMounted } from 'vue'
 
-  const props = defineProps(['word', 'letters'])
-  const emit = defineEmits(['reset', 'preview'])
+  interface Props {
+    word?: string;
+    letters: string;
+  }
 
-  const loading = ref(true)
-  const anagrams = ref([])
-  const showAll = ref(false)
-  const previewWord = ref("")
-  const anagramsSlice = ref(10)
+  interface Emits {
+    (e: 'reset'): void;
+    (e: 'preview', value: string): void;
+  }
+
+  const props = defineProps<Props>()
+  const emit = defineEmits<Emits>()
+
+  const loading = ref<boolean>(true)
+  const anagrams = ref<string[]>([])
+  const showAll = ref<boolean>(false)
+  const previewWord = ref<string>("")
+  const anagramsSlice = ref<number>(10)
 
   watch(previewWord, () => {
     emit("preview", previewWord.value)
   })
 
   onMounted(() => {
-    previewWord.value = props.word
+    previewWord.value = props.word || ""
 
     fetch(`https://ryandeba.com/anagrams/${props.letters}`)
       .then(r => r.json())
       .then(data => {
         anagrams.value = data
-          .filter((e, i, a) => a.indexOf(e) == i) // TODO: this seems like it shouldn't be required here
-          .map(a => a.toUpperCase())
+          .filter((e: string, i: number, a: string[]) => a.indexOf(e) == i) // TODO: this seems like it shouldn't be required here
+          .map((a: string) => a.toUpperCase())
 
         loading.value = false
       })
+      // TODO: catch
   })
 </script>
 

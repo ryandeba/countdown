@@ -1,32 +1,32 @@
 <script setup lang="ts">
-  // TODO: http://www.thecountdownpage.com/letters.htm
   import { ref, watch, onMounted } from 'vue'
   import LettersLetters from './LettersLetters.vue'
   import LettersScore from './LettersScore.vue'
+  import { Letter } from '@/types/types';
 
-  const letters = ref([])
-  const input = ref("")
-  const previewWord = ref("")
+  const letters = ref<Letter[]>([])
+  const input = ref<string>("")
+  const previewWord = ref<string>("")
 
   watch(input, () => {
     input.value = input.value.toUpperCase()
     input.value = input.value.replace(/[^A-Z]/g, "")
   })
 
-  const reset = () => {
+  const reset = (): void => {
     letters.value = []
     input.value = ""
     previewWord.value = ""
   }
 
-  const setLettersFromInput = () => {
+  const setLettersFromInput = (): void => {
     if (input.value.length < 2) {
       return
     }
 
     letters.value = input.value
       .split("")
-      .map((l, i) => {
+      .map((l: string, i: number) => {
         return {
           char: l,
           index: -1,
@@ -36,7 +36,7 @@
       })
   }
 
-  onMounted(() => {
+  onMounted((): void => {
     reset()
   })
 </script>

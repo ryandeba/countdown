@@ -7,15 +7,16 @@
   import LettersSubmissions from './LettersSubmissions.vue'
   import LettersScore from './LettersScore.vue'
   import LettersTimer from './LettersTimer.vue'
+  import { Letter } from '@/types/types';
 
-  const letters = ref([])
-  const submissions = ref([])
-  const submittedWord = ref("")
-  const previewWord = ref("")
-  const timer = ref(30)
+  const letters = ref<Letter[]>([])
+  const submissions = ref<string[]>([])
+  const submittedWord = ref<string>("")
+  const previewWord = ref<string>("")
+  const timer = ref<number>(30)
 
-  const gameStatus = computed(() => {
-    if (letters.value.filter(l => Boolean(l.char)).length < 9) {
+  const gameStatus = computed<"LETTERS" | "WORDS" | "SUBMIT" | "SCORE">(() => {
+    if (letters.value.filter((l: Letter) => Boolean(l.char)).length < 9) {
       return "LETTERS"
     }
 
@@ -30,7 +31,7 @@
     return "SCORE"
   })
 
-  const selectedLetters = computed(() => {
+  const selectedLetters = computed<string>(() => {
     return letters.value
       .filter(l => l.selected)
       .sort((a, b) => a.index - b.index)
@@ -38,14 +39,14 @@
       .join("")
   })
 
-  const maxIndex = computed(() => {
+  const maxIndex = computed<number>(() => {
     let result = letters.value
-      .filter(l => l.selected)
-      .sort((a, b) => a.index - b.index)
+      .filter((l: Letter) => l.selected)
+      .sort((a: Letter, b: Letter) => a.index - b.index)
       .pop()
       ?.index
 
-    result = Number.isInteger(result) ? result : -1
+    result = Number.isInteger(result) ? result as number : -1
 
     return result
   })
@@ -54,7 +55,7 @@
     unselectAllLetters()
   })
 
-  const reset = () => {
+  const reset = (): void => {
     letters.value = new Array(9).fill("").map((e, i) => {
       return {
         char: "", index: -1, selected: false, id: i
@@ -66,8 +67,8 @@
     timer.value = 30
   }
 
-  const addLetter = l => {
-    let index = letters.value.findIndex(l => l.char == "")
+  const addLetter = (l: string): void => {
+    const index: number = letters.value.findIndex((l: Letter) => l.char == "")
 
     if (index == -1) {
       return
@@ -76,8 +77,8 @@
     letters.value[index].char = l
   }
 
-  const selectLetterAtIndex = index => {
-    if (gameStatus.value != 'WORDS') {
+  const selectLetterAtIndex = (index: number) => {
+    if (gameStatus.value !== 'WORDS') {
       return
     }
 
@@ -86,7 +87,7 @@
     if (letters.value[index].selected) {
       letters.value[index].index = maxIndex.value + 1
     } else {
-      let letterIndex = letters.value[index].index
+      const letterIndex: number = letters.value[index].index
 
       letters.value.forEach(l => {
         if (l.index == letterIndex) {
@@ -98,7 +99,7 @@
     }
   }
 
-  const onKeyPressed = key => {
+  const onKeyPressed = (key: string) => {
     key = key.toUpperCase()
 
     if (key == "BACKSPACE") {

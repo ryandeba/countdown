@@ -1,18 +1,33 @@
 <script setup lang="ts">
   import { defineModel, defineProps, defineEmits, computed, watch } from 'vue'
+  import { Letter } from '@/types/types';
 
-  const model = defineModel({})
+  interface Props {
+    preview: string;
+  }
 
-  const props = defineProps(["preview"])
+  interface Emits {
+    (e: 'selectLetterAtIndex', id: number): void;
+  }
 
-  const emit = defineEmits(["selectLetterAtIndex"])
+  const model = defineModel<Letter[]>({
+    required: true
+  })
 
-  const previewIds = computed(() => {
-    let ids = []
+  const props = defineProps<Props>()
+  const emit = defineEmits<Emits>()
+
+  const previewIds = computed<number[]>(() => {
+    let ids: number[] = []
+
     return (props.preview || "")
       .split("")
-      .map(l => {
-        let modelLetter = model.value.find(e => e.char == l && ids.indexOf(e.id) == -1)
+      .map((l: string) => {
+        let modelLetter = model.value.find((e: Letter) => e.char == l && ids.indexOf(e.id) == -1)
+
+        if (!modelLetter) {
+          return -1
+        }
 
         ids.push(modelLetter.id)
 

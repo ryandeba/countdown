@@ -1,11 +1,13 @@
 <script setup lang="ts">
   import { ref, defineModel, onMounted, onUnmounted } from 'vue'
 
-  const model = defineModel({})
+  const model = defineModel<number>({
+    required: true
+  })
 
-  let interval
+  let interval: number
 
-  const decrement = () => {
+  const decrement = (): void => {
     model.value = Math.max(0, model.value - 1)
   }
 
@@ -34,7 +36,7 @@
         items-center
       "
     >
-      {{ parseInt(model) }}
+      {{ model }}
     </div>
   </div>
 </template>

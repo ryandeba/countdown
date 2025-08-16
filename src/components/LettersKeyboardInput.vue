@@ -1,12 +1,16 @@
 <script setup lang="ts">
-  import { ref, reactive, watch, defineEmits, onMounted, onUnmounted } from 'vue'
+  import { ref, defineEmits, onMounted, onUnmounted } from 'vue'
 
-  const emit = defineEmits(["keyPressed"])
+  interface Emits {
+    (e: 'keyPressed', key: string): void
+  }
 
-  const pressedKeys = ref([])
+  const emit = defineEmits<Emits>()
 
-  const onKeydown = e => {
-    let key = e.key.toUpperCase()
+  const pressedKeys = ref<string[]>([])
+
+  const onKeydown = (e: KeyboardEvent): void => {
+    const key: string = e.key.toUpperCase()
 
     if (pressedKeys.value.indexOf(key) == -1) {
       pressedKeys.value.push(key);
@@ -14,10 +18,10 @@
     }
   }
 
-  const onKeyup = e => {
-    let key = e.key.toUpperCase()
+  const onKeyup = (e: KeyboardEvent): void => {
+    const key: string = e.key.toUpperCase()
 
-    let index = pressedKeys.value.indexOf(key)
+    const index: number = pressedKeys.value.indexOf(key)
 
     if (index > -1) {
       pressedKeys.value.splice(index, 1)
