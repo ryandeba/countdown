@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { defineModel, defineProps, defineEmits, computed, watch } from 'vue'
-  import { Letter } from '@/types/types';
+  import type { Letter } from '@/types/types';
 
   interface Props {
     preview: string;

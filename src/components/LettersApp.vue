@@ -7,7 +7,7 @@
   import LettersSubmissions from './LettersSubmissions.vue'
   import LettersScore from './LettersScore.vue'
   import LettersTimer from './LettersTimer.vue'
-  import { Letter } from '@/types/types';
+  import type { Letter } from '@/types/types';
 
   const letters = ref<Letter[]>([])
   const submissions = ref<string[]>([])
