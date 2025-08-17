@@ -1,0 +1,1 @@
+import{_ as e}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{c as r,b as c}from"./index-BrrJZzE6.js";const n={};function o(t,s){return c(),r("main",null," TODO: NumbersView ")}const _=e(n,[["render",o]]);export{_ as default};
