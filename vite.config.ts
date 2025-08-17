@@ -7,15 +7,26 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/countdown/',
   plugins: [
     vue(),
     vueDevTools(),
     tailwindcss(),
   ],
+  base: '/countdown/',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        sanitizeFileName: (name) => {
+          return name
+            .replace(/\s+/g, '-')
+            .replace(/[^a-zA-Z0-9_.-]/g, '');
+        }
+      }
+    }
+  }
 })
