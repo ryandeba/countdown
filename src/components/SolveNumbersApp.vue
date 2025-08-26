@@ -30,7 +30,7 @@
   const reset = (): void => {
     numbers.value = new Array(6).fill('')
     target.value = ''
-    showSolutions.value = true
+    showSolutions.value = false
   }
 
   onMounted((): void => {
