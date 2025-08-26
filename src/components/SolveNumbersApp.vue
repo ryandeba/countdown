@@ -18,7 +18,7 @@
       return `Target must be a valid integer greater than 0`
     }
 
-    function isValidInteger(num) {
+    function isValidInteger(num: number) {
       return (
         !isNaN(num)
         && num > 0
@@ -28,9 +28,8 @@
   })
 
   const reset = (): void => {
-    // TODO
-    numbers.value = [50, 75, 100, 6, 4, 9]// TODO new Array(6).fill('')
-    target.value = '631'
+    numbers.value = new Array(6).fill('')
+    target.value = ''
     showSolutions.value = true
   }
 
@@ -95,7 +94,7 @@
               type="button"
               class="btn btn-primary btn-wide mt-2"
               @click="showSolutions = true"
-              :disabled="validationError"
+              :disabled="Boolean(validationError)"
             >
               Show Solutions
             </button>

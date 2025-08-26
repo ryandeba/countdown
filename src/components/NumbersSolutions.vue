@@ -8,12 +8,12 @@
 
   const props = defineProps<Props>()
 
-  const solutions = ref([])
+  const solutions = ref<string[]>([])
 
   const calculateSolutions = () => {
-    const validSolutions = new Set()
+    const validSolutions: Set<string> = new Set()
 
-    function recurse(total, remainingNumbers, expression) {
+    function recurse(total: number, remainingNumbers: number[], expression: string) {
       if (total == props.target) {
         validSolutions.add(expression)
       }
