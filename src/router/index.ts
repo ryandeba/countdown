@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  publicPath: process.env.NODE_ENV === 'production' ? '/countdown/' : '/',
   routes: [
     {
       path: '/',
@@ -23,6 +24,11 @@ const router = createRouter({
       path: '/solveLetters',
       name: 'solveLetters',
       component: () => import('../views/SolveLettersView.vue'),
+    },
+    {
+      path: '/solveNumbers',
+      name: 'solveNumbers',
+      component: () => import('../views/SolveNumbersView.vue'),
     },
   ],
 })

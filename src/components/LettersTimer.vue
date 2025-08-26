@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, defineModel, onMounted, onUnmounted } from 'vue'
+  import { ref, onMounted, onUnmounted } from 'vue'
 
   const model = defineModel<number>({
     required: true

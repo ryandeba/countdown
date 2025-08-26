@@ -180,7 +180,7 @@
           <input
             :value="selectedLetters"
             class="input input-lg w-full tracking-[.4rem]"
-            readonly
+            @keydown.prevent
           >
 
           <div class="card-actions justify-between">

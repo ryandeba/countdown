@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { defineProps, defineEmits, ref, computed, watch, onMounted } from 'vue'
+  import { ref, computed, watch, onMounted } from 'vue'
 
   interface Props {
     word?: string;

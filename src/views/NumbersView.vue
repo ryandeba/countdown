@@ -1,5 +1,3 @@
 <template>
-  <main>
-    TODO: NumbersView
-  </main>
+  TODO: NumbersView
 </template>

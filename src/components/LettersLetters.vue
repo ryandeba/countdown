@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { defineModel, defineProps, defineEmits, computed, watch } from 'vue'
+  import { computed, watch } from 'vue'
   import type { Letter } from '@/types/types';
 
   interface Props {
@@ -63,7 +63,7 @@
       v-for="(l, i) in model"
       :key="l.id"
       type="button"
-      class="btn btn-square btn-xl m-1"
+      class="btn btn-square lg:btn-xl m-0.5"
       :class="l.selected || !l.char || (previewIds.length > 0 && previewIds.indexOf(l.id) == -1) ? 'btn-default' : 'btn-primary'"
       @click="emit('selectLetterAtIndex', i)"
     >

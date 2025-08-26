@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, defineEmits, onMounted } from 'vue'
+  import { ref, onMounted } from 'vue'
 
   const vowels = ref<string[]>(`
     ${'A'.repeat(15)} ${'E'.repeat(21)} ${'I'.repeat(13)} ${'O'.repeat(13)} ${'U'.repeat(5)}

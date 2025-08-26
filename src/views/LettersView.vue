@@ -3,7 +3,5 @@
 </script>
 
 <template>
-  <main>
-    <LettersApp />
-  </main>
+  <LettersApp />
 </template>

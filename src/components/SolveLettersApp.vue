@@ -11,6 +11,7 @@
   watch(input, () => {
     input.value = input.value.toUpperCase()
     input.value = input.value.replace(/[^A-Z]/g, "")
+    input.value = input.value.substring(0, 12)
   })
 
   const reset = (): void => {
