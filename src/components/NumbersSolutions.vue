@@ -9,6 +9,8 @@
   const props = defineProps<Props>()
 
   const solutions = ref<string[]>([])
+  const showAll = ref<boolean>(false)
+  const solutionsSlice = ref<number>(10)
 
   const calculateSolutions = () => {
     const validSolutions: Set<string> = new Set()
@@ -60,11 +62,32 @@
 </script>
 
 <template>
-  <div>
-    <span class="font-bold">
-      Solutions ({{ solutions.length }}):
-    </span>
+    <div class="font-bold">
+      Solutions:
+    </div>
 
-     <pre>{{ solutions }}</pre>
-  </div>
+    <template v-if="solutions.length == 0">
+      <div class="text-center text-error">
+        No solutions found
+      </div>
+    </template>
+
+    <button
+      v-for="s in solutions.slice(0, showAll ? solutions.length : solutionsSlice)"
+      :key="s"
+      type="button"
+      class="btn btn-default"
+    >
+      {{ s }}
+    </button>
+
+    <template v-if="!showAll && solutions.length > solutionsSlice">
+        <button
+          type="button"
+          class="btn btn-neutral"
+          @click="showAll = true"
+        >
+          Show all {{ solutions.length }} solutions
+        </button>
+    </template>
 </template>

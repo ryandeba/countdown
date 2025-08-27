@@ -1,22 +1,35 @@
 <script setup lang="ts">
-  import { ref, computed, onMounted } from 'vue'
+  import { ref, computed, watch, onMounted } from 'vue'
   import NumbersSolutions from './NumbersSolutions.vue'
 
-  const numbers = ref<string[]>([])
+  const numbers = ref<string[]>(new Array(6).fill(''))
   const target = ref<string>('')
-  const showSolutions = ref(false)
+  const solutionsKey = ref<string>('')
 
-  const validationError = computed(() => {
+  enum ValidationError {
+    Numbers,
+    Target
+  }
+
+  const targetAndNumbersAsString = computed(() => {
+    return `${target.value}_${numbers.value.join('_')}`
+  })
+
+  const validationErrors = computed(() => {
+    let result = []
+
     for (let n of numbers.value) {
       if (!isValidInteger(Number(n))) {
-        console.log('invalid', n)
-        return `Numbers must be valid integers greater than 0 (${n})`
+        result.push(ValidationError.Numbers)
+        break
       }
     }
 
     if (!isValidInteger(Number(target.value))) {
-      return `Target must be a valid integer greater than 0`
+      result.push(ValidationError.Target)
     }
+
+    return result
 
     function isValidInteger(num: number) {
       return (
@@ -27,10 +40,12 @@
     }
   })
 
+  watch(targetAndNumbersAsString, () => {
+    solutionsKey.value = ''
+  })
+
   const reset = (): void => {
-    numbers.value = new Array(6).fill('')
-    target.value = ''
-    showSolutions.value = false
+    solutionsKey.value = ''
   }
 
   onMounted((): void => {
@@ -42,6 +57,15 @@
   <div class="flex justify-center">
     <div class="card card-border bg-base-100 w-100 bg-neutral">
       <div class="card-body">
+
+        <span class="font-bold">
+          Target:
+        </span>
+
+        <input
+          class="input m-1 w-full"
+          v-model="target"
+        >
 
         <span class="font-bold">
           Numbers:
@@ -56,50 +80,49 @@
           >
         </div>
 
-        <span class="font-bold">
-          Target:
-        </span>
-
-        <input
-          class="input m-1 w-full"
-          v-model="target"
+        <div
+          :class="{
+            'text-success': validationErrors.indexOf(ValidationError.Target) == -1
+          }"
         >
+          <span class="inline-block w-4">
+            {{ validationErrors.indexOf(ValidationError.Target) == -1 ? '✓' : '•' }}
+          </span>
 
-        <template v-if="showSolutions">
+          Target must be a integer greater than 0
+        </div>
+
+        <div
+          :class="{
+            'text-success': validationErrors.indexOf(ValidationError.Numbers) == -1
+          }"
+        >
+          <span class="inline-block w-4">
+            {{ validationErrors.indexOf(ValidationError.Numbers) == -1 ? '✓' : '•' }}
+          </span>
+
+          Each number must be an integer greater than 0
+        </div>
+
+
+        <div class="text-center">
+          <button
+            type="button"
+            class="btn btn-primary btn-wide mt-2"
+            @click="solutionsKey = targetAndNumbersAsString"
+            :disabled="Object.keys(validationErrors).length > 0"
+          >
+            Show Solutions
+          </button>
+        </div>
+
+        <template v-if="solutionsKey == targetAndNumbersAsString">
           <NumbersSolutions
             :numbers="numbers.map(Number)"
             :target="Number(target)"
+            :key="solutionsKey"
           ></NumbersSolutions>
         </template>
-
-        <template v-if="validationError">
-          <div class="text-error text-center">
-            {{ validationError }}
-          </div>
-        </template>
-
-        <div class="card-actions justify-center tracking-normal min-h-12">
-          <template v-if="showSolutions">
-            <button
-              type="button"
-              class="btn btn-primary btn-wide mt-2"
-              @click="reset"
-            >
-              Reset
-            </button>
-          </template>
-
-          <template v-else>
-            <button
-              type="button"
-              class="btn btn-primary btn-wide mt-2"
-              @click="showSolutions = true"
-              :disabled="Boolean(validationError)"
-            >
-              Show Solutions
-            </button>
-          </template>
-        </div>
       </div>
     </div>
   </div>
