@@ -3,48 +3,64 @@
 </script>
 
 <template>
-  <div class="text-center text-2xl">
-    Play
-  </div>
-
   <div class="flex justify-center">
-    <RouterLink
-      to="/letters"
-      class="btn btn-primary btn-xl m-8"
-    >
-      Letters
-    </RouterLink>
+    <div class="card card-border bg-base-100 w-96 bg-neutral">
+      <div class="card-body py-5">
+        <p class="text-center">
+          Welcome!
+          Here, you can play the letters and numbers rounds from the British game show
+          <a href="https://en.wikipedia.org/wiki/Countdown_(game_show)" target="_blank" class="link">Countdown</a>.
+        </p>
 
-    <RouterLink
-      to="/numbers"
-      class="btn btn-primary btn-xl m-8"
-      disabled
-    >
-      Numbers
-    </RouterLink>
-  </div>
+        <div
+          class="divider"
+        ></div>
 
-  <div
-    class="divider"
-  ></div>
+        <p class="text-center">
+          Challenge yourself to find the longest word in a Letters round, or hit the target number in a Numbers round.
+        </p>
 
-  <div class="text-center text-2xl">
-    Solve
-  </div>
+        <div class="flex justify-around">
+          <RouterLink
+            to="/letters"
+            class="btn btn-info"
+          >
+            Play Letters
+          </RouterLink>
 
-  <div class="flex justify-center">
-    <RouterLink
-      to="/solveLetters"
-      class="btn btn-primary btn-xl m-8"
-    >
-      Letters
-    </RouterLink>
+          <RouterLink
+            to="/numbers"
+            class="btn btn-info"
+            disabled
+          >
+            Play Numbers
+          </RouterLink>
+        </div>
 
-    <RouterLink
-      to="/solveNumbers"
-      class="btn btn-primary btn-xl m-8"
-    >
-      Numbers
-    </RouterLink>
+        <div
+          class="divider"
+        ></div>
+
+        <p class="text-center">
+          Manually enter letters or numbers to find the best solutions.
+        </p>
+
+        <div class="flex justify-around">
+          <RouterLink
+            to="/solveLetters"
+            class="btn btn-success"
+          >
+            Solve Letters
+          </RouterLink>
+
+          <RouterLink
+            to="/solveNumbers"
+            class="btn btn-success"
+          >
+            Solve Numbers
+          </RouterLink>
+        </div>
+      </div>
+    </div>
   </div>
 </template>

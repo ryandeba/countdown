@@ -40,23 +40,29 @@
           </div>
         </template>
 
-        <div
-          v-for="(word, i) in words"
-        >
-          <button
-            @click="selectedIndex = i"
-            class="btn w-full justify-between"
-            :class="selectedIndex == i ? 'btn-secondary btn-active' : 'btn-outline'"
-          >
-            <span class="tracking-[.2rem]">
-              {{ word }}
-            </span>
+        <template v-else>
+          <p class="text-center mb-3">
+            Select 1 word to submit for scoring. Longer words score more points.
+          </p>
 
-            <span class="opacity-75">
-              {{ word.length }}
-            </span>
-          </button>
-        </div>
+          <div
+            v-for="(word, i) in words"
+          >
+            <button
+              @click="selectedIndex = i"
+              class="btn w-full justify-between"
+              :class="selectedIndex == i ? 'btn-secondary btn-active' : 'btn-outline'"
+            >
+              <span class="tracking-[.2rem]">
+                {{ word }}
+              </span>
+
+              <span class="opacity-75">
+                {{ word.length }}
+              </span>
+            </button>
+          </div>
+        </template>
 
         <template v-if="selectedIndex > -1">
           <div class="card-actions justify-center tracking-normal min-h-12">

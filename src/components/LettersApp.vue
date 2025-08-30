@@ -169,14 +169,23 @@
   </template>
 
   <template v-if="gameStatus == 'WORDS'">
-    <LettersTimer
-      v-model="timer"
-      class="mb-4"
-    ></LettersTimer>
-
+    <!-- TODO: move this into a component -->
     <div class="flex justify-center">
       <div class="card card-border bg-base-100 w-96 bg-neutral m-2">
         <div class="card-body">
+          <div class="flex items-center mb-3">
+            <div>
+              <LettersTimer
+                v-model="timer"
+                class="mr-4"
+              ></LettersTimer>
+            </div>
+
+            <p>
+              Submit the longest words you can find before the timer runs out.
+            </p>
+          </div>
+
           <input
             :value="selectedLetters"
             class="input input-lg w-full tracking-[.4rem]"
@@ -188,6 +197,7 @@
               type="button"
               class="btn btn-danger mr-5"
               @click="unselectAllLetters"
+              :disabled="selectedLetters.length == 0"
             >
               Clear
             </button>
@@ -196,9 +206,20 @@
               type="button"
               class="btn btn-primary"
               @click="addSubmission"
+              :disabled="selectedLetters.length == 0"
             >
               Submit
             </button>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="flex flex-col items-center">
+            <div
+              v-for="s in submissions"
+            >
+              {{ s }}
+            </div>
           </div>
         </div>
       </div>

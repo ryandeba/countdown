@@ -21,22 +21,20 @@
 </script>
 
 <template>
-  <div class="flex justify-center">
-    <div
-      class="
-        bg-primary
-        text-primary-content
-        text-xl
-        font-bold
-        rounded-full
-        w-20
-        aspect-1/1
-        flex
-        justify-center
-        items-center
-      "
-    >
-      {{ model }}
-    </div>
+  <div
+    class="
+      border
+      text-primary-content
+      text-xl
+      font-bold
+      rounded-full
+      w-16
+      aspect-1/1
+      flex
+      justify-center
+      items-center
+    "
+  >
+    {{ model }}
   </div>
 </template>

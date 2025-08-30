@@ -52,22 +52,28 @@
 <template>
   <div class="flex justify-center">
     <div class="card card-border bg-base-100 w-96 bg-neutral">
-      <div class="card-body flex-row justify-center">
-        <button
-          class="btn btn-primary btn-lg w-40"
-          @click="selectVowel"
-          :disabled="vowelCount >= 5"
-        >
-          Vowel
-        </button>
+      <div class="card-body">
+        <p class="text-center mb-3">
+          Select 9 random letters. Your selection must contain at least 3 vowels and at least 4 consonants.
+        </p>
 
-        <button
-          class="btn btn-primary btn-lg w-40"
-          @click="selectConsonant"
-          :disabled="consonantCount >= 6"
-        >
-          Consonant
-        </button>
+        <div class="flex flex-row justify-around">
+          <button
+            class="btn btn-info btn-lg"
+            @click="selectVowel"
+            :disabled="vowelCount >= 5"
+          >
+            Vowel
+          </button>
+
+          <button
+            class="btn btn-info btn-lg"
+            @click="selectConsonant"
+            :disabled="consonantCount >= 6"
+          >
+            Consonant
+          </button>
+        </div>
       </div>
     </div>
   </div>
