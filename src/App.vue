@@ -2,10 +2,10 @@
   import { ref } from 'vue'
   import { RouterLink, RouterView } from 'vue-router'
 
-  const dropdown = ref(null)
+  const dropdown = ref<HTMLInputElement | null>(null)
 
   const closeDropdown = () => {
-    dropdown.value.removeAttribute('open')
+    dropdown.value && dropdown.value.removeAttribute('open')
   }
 </script>
 
