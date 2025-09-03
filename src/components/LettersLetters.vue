@@ -64,7 +64,7 @@
       :key="l.id"
       type="button"
       class="btn btn-square lg:btn-xl m-0.5"
-      :class="l.selected || !l.char || (previewIds.length > 0 && previewIds.indexOf(l.id) == -1) ? 'btn-default' : 'btn-primary'"
+      :class="l.selected || !l.char || (previewIds.length > 0 && previewIds.indexOf(l.id) == -1) ? 'btn-default btn-outline' : 'btn-primary'"
       @click="emit('selectLetterAtIndex', i)"
     >
       {{ l.char }}

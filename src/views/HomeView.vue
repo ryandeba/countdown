@@ -6,7 +6,7 @@
   <div class="flex justify-center">
     <div class="card card-border bg-base-100 w-96 bg-neutral">
       <div class="card-body py-5">
-        <p class="text-center">
+        <p class="text-center text-lg">
           Welcome!
           Here, you can play the letters and numbers rounds from the British game show
           <a href="https://en.wikipedia.org/wiki/Countdown_(game_show)" target="_blank" class="link">Countdown</a>.

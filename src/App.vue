@@ -2,6 +2,13 @@
   import { ref } from 'vue'
   import { RouterLink, RouterView } from 'vue-router'
 
+  const links = ref<object[]>([
+    { path: "/", label: "Home", },
+    { path: "/letters", label: "Play Letters", },
+    { path: "/solveLetters", label: "Solve Letters", },
+    { path: "/solveNumbers", label: "Solve Numbers", },
+  ])
+
   const dropdown = ref<HTMLInputElement | null>(null)
 
   const closeDropdown = () => {
@@ -22,39 +29,15 @@
         <ul
           class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
         >
-          <li>
+          <li v-for="l in links">
             <RouterLink
-              to="/"
+              :to="l.path"
+              :class="{
+                'underline': $route.path === l.path,
+              }"
               @click="closeDropdown"
             >
-              Home
-            </RouterLink>
-          </li>
-
-          <li>
-            <RouterLink
-              to="/letters"
-              @click="closeDropdown"
-            >
-              Play: Letters
-            </RouterLink>
-          </li>
-
-          <li>
-            <RouterLink
-              to="/solveLetters"
-              @click="closeDropdown"
-            >
-              Solve: Letters
-            </RouterLink>
-          </li>
-
-          <li>
-            <RouterLink
-              to="/solveNumbers"
-              @click="closeDropdown"
-            >
-              Solve: Numbers
+              {{ l.label }}
             </RouterLink>
           </li>
         </ul>

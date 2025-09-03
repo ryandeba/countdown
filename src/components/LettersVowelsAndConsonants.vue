@@ -59,7 +59,7 @@
 
         <div class="flex flex-row justify-around">
           <button
-            class="btn btn-info btn-lg"
+            class="btn btn-info"
             @click="selectVowel"
             :disabled="vowelCount >= 5"
           >
@@ -67,7 +67,7 @@
           </button>
 
           <button
-            class="btn btn-info btn-lg"
+            class="btn btn-info"
             @click="selectConsonant"
             :disabled="consonantCount >= 6"
           >
