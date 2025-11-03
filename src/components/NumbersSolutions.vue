@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  // TODO: only positive integers are allowed for each step
   import { ref, onMounted } from 'vue'
 
   interface Props {

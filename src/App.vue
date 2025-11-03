@@ -5,6 +5,7 @@
   const links = ref<object[]>([
     { path: "/", label: "Home", },
     { path: "/letters", label: "Play Letters", },
+    { path: "/numbers", label: "Play Numbers", },
     { path: "/solveLetters", label: "Solve Letters", },
     { path: "/solveNumbers", label: "Solve Numbers", },
   ])

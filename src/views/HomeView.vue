@@ -31,7 +31,6 @@
           <RouterLink
             to="/numbers"
             class="btn btn-info"
-            disabled
           >
             Play Numbers
           </RouterLink>

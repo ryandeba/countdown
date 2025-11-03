@@ -2,7 +2,7 @@
   import { ref, watch, onMounted } from 'vue'
   import LettersLetters from './LettersLetters.vue'
   import LettersScore from './LettersScore.vue'
-  import type { Letter } from '@/types/types';
+  import type { CountdownLetter } from '@/types/types';
 
   const letters = ref<Letter[]>([])
   const input = ref<string>("")

@@ -1,18 +1,15 @@
 <script setup lang="ts">
   import { ref, computed, watch, onMounted } from 'vue'
 
-  interface Props {
-    word?: string;
-    letters: string;
-  }
+  const props = defineProps<{
+    word?: string
+    letters: string
+  }>()
 
-  interface Emits {
-    (e: 'reset'): void;
-    (e: 'preview', value: string): void;
-  }
-
-  const props = defineProps<Props>()
-  const emit = defineEmits<Emits>()
+  const emit = defineEmits<{
+    (e: 'reset'): void
+    (e: 'preview', value: string): void
+  }>()
 
   const loading = ref<boolean>(true)
   const anagrams = ref<string[]>([])

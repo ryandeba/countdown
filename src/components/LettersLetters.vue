@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { computed, watch } from 'vue'
-  import type { Letter } from '@/types/types';
+  import type { CountdownLetter } from '@/types/types';
 
   interface Props {
     preview: string;
